@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js</title>
+</head>
+<body>
+  <div class="product">
+    <div>
+      <img :src="image" />
+    </div>
+    
+    <div class="product-info">
+      <h2>{{ product }}</h2>
+      <p v-if="inStock">In Stock</p>
+      <p v-else :class="{ outOfStock: !inStock}">Out of Stock</p>
+
+      <ul>
+        <li v-for="detail in details">{{ detail }}</li>
+      </ul>
+
+      <div class="color-box"
+           v-for="variant in variants"
+           :key="variant.variantId"
+           :style="{ backgroundColor: variant.variantColor }"
+           @mouseover="upadateProduct(variant.variantImage)"
+      >
+      </div>
+
+      <button v-on:click="addToCart"
+              :disabled="!inStock"
+              :class="{ disabledButton: !inStock }"
+      >
+      Add to cart
+      </button>
+
+      <div class="cart">
+        <p>Cart({{ cart }})</p>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  var app = new Vue({
+    el: '.product',
+    data: {
+      product: 'Socks',
+      brand: 'Vue Mastery',
+      image: '.assets/vmSocks-green.jpg',
+      inStock: true,
+      details: ["15m", "TYPE: Carnivore"] ,
+      variants: [
+        {
+          variantId: 2234,
+          variantColor: 'green',
+          variantImage: '.assets/vmSocks-green.jpg'
+        },
+        {
+          variantId: 2235,
+          variantColor: 'blue',
+          variantImage: '.assets/vmSocks-blue.jpg'
+        }
+      ],
+       cart: 0
+    },
+    methods: {
+      addToCart() {
+        this.cart += 1
+      },
+
+      updateProduct(variantImage) {
+        this.image = variantImage
+      }
+    },
+    computed: {
+      title() {
+        return this.brand + '' + this.product
+      }
+    }
+  })
+</script>
+</html>
